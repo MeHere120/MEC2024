@@ -150,7 +150,11 @@ def ComputeGroupings(drivers, riders):
         routes.append(route)
     return routes
 
-
-ComputeGroupings(drivers, riders)
-
-
+user_id = "Juan Lewis"
+groupings = ComputeGroupings(drivers, riders)
+out = "No group found"
+for group in groupings:
+    for person in group:
+        if get_user_name(person) == user_id:
+            output = group[:]
+print(output)
