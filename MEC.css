@@ -1,0 +1,92 @@
+/* All CSS will be in order of top to bottom of actual webpage*/
+
+.titleDiv {
+    background-color: rgb(121, 60, 179);
+    height: 10vh; /* Adjust height to fit buttons */
+    width: 100%; /* Make it full width */
+    text-align: center;
+    top:0;
+
+  }
+
+  .searchText {
+    background-color: rgb(121, 60, 179);
+    height: 10vh; /* Adjust height to fit buttons */
+    width: 100%;
+    color:black;
+    margin-top: 7vh;
+  }
+
+  .intro{
+    background-color:  rgb(121, 60, 179);
+    font-size: 23px;
+    text-align: center;
+  }
+
+  .searchArea {
+    display: grid; /* Corrected: Use 'flex' instead of 'flexbox' */
+    grid-template-columns: auto auto auto auto auto auto auto auto;
+    margin: 0;
+    place-items: center;
+    background-color: rgb(121, 60, 179);
+    height: 5vh; /* Adjust height to fit buttons */
+    width: 100%;
+    color:black;
+  }
+
+  .searchBar {
+    width: fit-content;
+    text-align: center;
+  }
+
+  .searchBarStyle {
+    width: 10vw;
+    height: 7vh;
+    border-color: rgb(230, 139, 72);
+    border-width: 10px;
+    border-radius: 15px;
+  }
+
+  .checkBox {
+    width: 9vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+  }
+
+  .submitButton {
+    padding: 10px 20px;
+    background-color: #296f2b;
+    color: white;
+    border:  #062407;
+    border-width: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    height: fit-content
+  }
+  .submitButton:hover {
+    background-color: #45a049;
+  }
+
+
+
+
+
+
+/* All Different Text used */
+
+.titleText {
+    font-family: "Carter One", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 10vh;
+  }
+
+body {
+    font-family: Arial;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+    background-color: rgb(121, 60, 179);
+    
+}

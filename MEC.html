@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <!--head is used when applying stuff to the website that doesnt show up on the page --> 
+  <head>
+
+    <!--Hopefully this fixes size-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Changing the name of the tab-->
+    <title>
+      CP
+    </title>
+
+    <!--load css from seperate file so code doesn't get clumped and hard to read-->
+    <link rel="stylesheet" href="MEC.css">
+
+    <!--Linking text from Google Fonts for the title -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Carter+One&display=swap" rel="stylesheet">
+
+
+    <!-- Lets python be used in HTML!!!! -->
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+
+  </head>
+
+  <!--body is used when applying stuff to the website and it shows up on the website-->
+  <body>
+    <div class="titleDiv">
+        <p class="titleText">
+          CarpoolPal
+        </p>
+    </div>
+
+    <div class="searchText">
+        <p class="intro">
+         Please enter the following information to find the best options for you!
+         </p>
+    </div>
+
+    <div class="searchArea">
+      <div class="searchBar">
+        <input type="text" class="searchBarStyle" id="latitude" placeholder="Enter Latitude">
+      </div>
+      <div class="searchBar">
+        <input type="text" class="searchBarStyle" id="longitude" placeholder="Enter Longitude">
+      </div>
+      <div class="searchBar">
+        <input type="text" class="searchBarStyle" id="destination" placeholder="Enter final destination">
+      </div>
+      <div class="searchBar">
+        <input type="text" class="searchBarStyle" id="departure" placeholder="Enter departure time">
+      </div>
+      <div class="searchBar">
+        <input type="text" class="searchBarStyle" id="numPeople" placeholder="Enter number of people">
+      </div>
+      
+
+      <div class="checkBox">
+        <input type="checkbox" class="searchBarStyle" id="sameGender" name="sameGender" value="True">
+        <label for="sameGender"> Same Gender Driver</label>
+      </div>
+      <div class="checkBox">
+        <input type="checkbox" class="searchBarStyle" id="nonSmoke" name="nonSmoke" value="True">
+        <label for="nonSmoke"> Non Smoking Driver</label>
+      </div>
+
+      <div>
+        <button class="submitButton" onclick="submitSearch()">Submit</button>
+
+        <script>
+          function submitSearch() {
+            // Get values from each text input
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+            const destination = document.getElementById('destination').value;
+            const departure = document.getElementById('departure').value;
+            const numPeople = document.getElementById('numPeople').value;
+      
+            // Get values from each checkbox (true if checked, false if not)
+            const sameGender = document.getElementById('sameGender').checked;
+            const nonSmoke = document.getElementById('nonSmoke').checked;
+      
+            // Log the input values (useful for debugging)
+            console.log('Latitude:', latitude);
+            console.log('Longitude:', longitude);
+            console.log('Destination:', destination);
+            console.log('Departure Time:', departure);
+            console.log('Number of People:', numPeople);
+            console.log('Same Gender Driver:', sameGender ? 'Yes' : 'No');
+            console.log('Non-Smoking Driver:', nonSmoke ? 'Yes' : 'No');
+      
+            // Show the data in an alert or process it further
+            alert(`
+              Search Data:
+              Latitude: ${latitude || 'Not provided'}
+              Longitude: ${longitude || 'Not provided'}
+              Destination: ${destination || 'Not provided'}
+              Departure Time: ${departure || 'Not provided'}
+              Number of People: ${numPeople || 'Not provided'}
+              Same Gender Driver: ${sameGender ? 'Yes' : 'No'}
+              Non-Smoking Driver: ${nonSmoke ? 'Yes' : 'No'}
+            `);
+            
+            // You can replace the alert with other actions like sending data to a server, 
+            // updating the page with results, etc.
+          }
+        </script>
+      </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+  </body>
+
+</html>
