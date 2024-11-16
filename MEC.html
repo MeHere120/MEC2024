@@ -42,19 +42,28 @@
 
     <div class="searchArea">
       <div class="searchBar">
-        <input type="text" class="searchBarStyle" id="latitude" placeholder="Enter Latitude">
+        <input type="text" class="searchBarStyle" id="latitude" placeholder="Start latitude">
       </div>
       <div class="searchBar">
-        <input type="text" class="searchBarStyle" id="longitude" placeholder="Enter Longitude">
+        <input type="text" class="searchBarStyle" id="longitude" placeholder="Start longitude">
       </div>
       <div class="searchBar">
-        <input type="text" class="searchBarStyle" id="destination" placeholder="Enter final destination">
+        <input type="text" class="searchBarStyle" id="destinationLat" placeholder="End latitude">
       </div>
       <div class="searchBar">
-        <input type="text" class="searchBarStyle" id="departure" placeholder="Enter departure time">
+        <input type="text" class="searchBarStyle" id="destinationLong" placeholder="End longitude">
       </div>
       <div class="searchBar">
-        <input type="text" class="searchBarStyle" id="numPeople" placeholder="Enter number of people">
+        <input type="text" class="searchBarStyle" id="departure" placeholder="Departure time">
+      </div>
+      <div class="searchBar">
+        <input type="text" class="searchBarStyle" id="numPeople" placeholder="Number of people">
+      </div>
+      <div class="searchBar">
+        <input type="text" class="searchBarStyle" id="gender" placeholder="Gender">
+      </div>
+      <div class="searchBar">
+        <input type="text" class="searchBarStyle" id="rider" placeholder="Rider or Driver">
       </div>
       
 
@@ -68,55 +77,64 @@
       </div>
 
       <div>
-        <button class="submitButton" onclick="submitSearch()">Submit</button>
-
+        <button class="submitButton" id="submitButton" onclick="submitSearch()">Submit</button>
+      
         <script>
           function submitSearch() {
-            // Get values from each text input
-            const latitude = document.getElementById('latitude').value;
-            const longitude = document.getElementById('longitude').value;
-            const destination = document.getElementById('destination').value;
-            const departure = document.getElementById('departure').value;
-            const numPeople = document.getElementById('numPeople').value;
-      
-            // Get values from each checkbox (true if checked, false if not)
-            const sameGender = document.getElementById('sameGender').checked;
-            const nonSmoke = document.getElementById('nonSmoke').checked;
-      
-            // Log the input values (useful for debugging)
-            console.log('Latitude:', latitude);
-            console.log('Longitude:', longitude);
-            console.log('Destination:', destination);
-            console.log('Departure Time:', departure);
-            console.log('Number of People:', numPeople);
-            console.log('Same Gender Driver:', sameGender ? 'Yes' : 'No');
-            console.log('Non-Smoking Driver:', nonSmoke ? 'Yes' : 'No');
-      
-            // Show the data in an alert or process it further
-            alert(`
-              Search Data:
-              Latitude: ${latitude || 'Not provided'}
-              Longitude: ${longitude || 'Not provided'}
-              Destination: ${destination || 'Not provided'}
-              Departure Time: ${departure || 'Not provided'}
-              Number of People: ${numPeople || 'Not provided'}
-              Same Gender Driver: ${sameGender ? 'Yes' : 'No'}
-              Non-Smoking Driver: ${nonSmoke ? 'Yes' : 'No'}
-            `);
-            
-            // You can replace the alert with other actions like sending data to a server, 
-            // updating the page with results, etc.
-          }
-        </script>
-      </div>
+          // Get values from each text input
+          const latitude = document.getElementById('latitude').value;
+          const longitude = document.getElementById('longitude').value;
+          const destinationLat = document.getElementById('destinationLat').value;
+          const destinationLong = document.getElementById('destinationLong').value;
+          const departure = document.getElementById('departure').value;
+          const numPeople = document.getElementById('numPeople').value;
+          const gender = document.getElementByID('gender').value
+          const rider = document.getElementByID('rider').value
+    
+          // Get values from each checkbox (true if checked, false if not)
+          const sameGender = document.getElementById('sameGender').checked;
+          const nonSmoke = document.getElementById('nonSmoke').checked;
 
+          localStorage.setItem('latitude', latitude);
+          localStorage.setItem('longitude', longitude);
+          localStorage.setItem('destinationLat', destinationLat);
+          localStorage.setItem('destinationLong', destinationLong);
+          localStorage.setItem('departure', departure);
+          localStorage.setItem('numPeople', numPeople);
+          localStorage.setItem('sameGender', sameGender);
+          localStorage.setItem('nonSmoke', nonSmoke);
+          localStorage.setItem('gender', gender);
+          localStorage.setItem('rider', rider);
 
+                <!-- // data.append(["none", "user", gender, rider, [latitude, longitude], [destinationLat. destinationLong], departure,
+          // maxDetour, nonsmoke, sameGender, numPeople, numPeople]) -->
+
+    
+                }
+      </script>
 
     </div>
+      
+    <div class="carpoolList" id="carpoolList">
+      <script>
+        // Ensure that 'outputValue' is accessible and formatted correctly in JavaScript
+        document.getElementById('submitButton').addEventListener('click', () => {
+            const outputs = ['A', 'B', 'c'];  // Reference the correct Python variable
 
+            const searchResult = document.getElementById('carpoolList');
+            searchResult.innerHTML = "";  // Clear any previous content
 
+                outputs.forEach(output => {
+                    const div = document.createElement('div');  // Create new div
+                    div.className = 'outputItem';  // Apply class for styling
+                    div.textContent = output;  // Set text content to output data
+                    searchResult.appendChild(div);  // Add to container
+                });
 
-
+        });
+      
+      </script>
+    </div>
 
 
 
