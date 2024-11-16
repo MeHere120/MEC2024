@@ -50,7 +50,7 @@ def get_gender_pref(person):
 def get_group_size(person):
     return person[10]
 def get_seat_num(person):
-    return person[11]
+    return int(person[11])
 
 def get_riders(gender, smoking, gender_preference, leave_time):
     out = []
@@ -86,8 +86,74 @@ def get_riders(gender, smoking, gender_preference, leave_time):
     return out
 
 
-def get_det_dist(a, b):
+def get_dist(a, b):
     r = 6371 #kilometers
     p = (math.pi)/180
     x1, y1, x2, y2 = float(a[0])*p, float(a[1])*p, float(b[0])*p, float(b[1])*p
     return 2*r*math.asin(math.sqrt(0.5-math.cos(x2-x1)/2+math.cos(x1)*math.cos(x2)*(1-math.cos((y2-y1)))/2))
+
+def GetDeviation(initial, secondary):
+    start_1 = initial[4]
+    start_2 = secondary[4]
+    end_1 = initial[5]
+    end_2 = secondary[5]
+    return (get_dist(start_1, start_2)+get_dist(start_2, end_2)+get_dist(end_2, end_1)-get_dist(start_1, end_1))
+
+
+
+def ComputeDriverGrouping(driver, riders, totalVisited):
+    # Compute the route for the current driver given possible riders
+    route = [driver]
+    capacity = get_seat_num(driver)
+   
+    visited = set()
+   
+    # Find N people to ride in the driver's car
+    for i in range(capacity):
+        # Find the rider with minimum deviation
+        minDev = float('inf')
+        minRider = -1
+        for j in range(len(riders)):
+            if j in visited or j in totalVisited:
+                continue
+            dev = GetDeviation(route[-1], riders[j])
+            if dev < minDev:
+                minDev = dev
+                minRider = j
+            if minRider == -1:
+                break
+        if minRider == -1:
+            break
+
+
+        # Add the rider with minimum deviation to the route
+        visited.add(minRider)
+        route.append(riders[minRider])
+   
+    # Route goes s1, s2, s3 ... e3, e2, e1
+    # Check if the route satisfies max deviation constraints
+    # If it fails, remove riders from the route until it succeeds
+    totalDev = 0
+    for i in range(len(route)-1):
+        totalDev += GetDeviation(route[i], route[i+1])
+        if totalDev > get_detour_dist(route[i]):
+            route = route[:i+1]
+            break
+   
+    totalVisited = totalVisited.union(visited)
+    return(route[:], totalVisited)
+
+
+def ComputeGroupings(drivers, riders):
+    # Find groupings for each driver, minimizing deviation
+    totalVisited = set()
+    routes = []
+    for driver in drivers:
+        get_riders(driver[2], driver[8], driver[9], driver[6])
+        route, totalVisited = ComputeDriverGrouping(driver, riders, totalVisited)
+        routes.append(route)
+    return routes
+
+print(ComputeGroupings(drivers, riders)[0])
+
+
