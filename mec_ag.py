@@ -2,7 +2,7 @@
 #anthony golubev
 
 import pandas as pd, numpy as np, math, datetime
-dataset_pd = pd.read_excel("Anthony-G-2024\MEC2024 Dataset.xlsx", sheet_name="Data")
+dataset_pd = pd.read_excel("MEC2024 Dataset.xlsx", sheet_name="Data")
 data = np.array(dataset_pd)
 
 for i in data:
