@@ -1,7 +1,7 @@
 #metropolitan engineering competition 16/11/2024
 #anthony golubev
 
-import pandas as pd, numpy as np, math
+import pandas as pd, numpy as np, math, datetime
 dataset_pd = pd.read_excel("Anthony-G-2024\MEC2024 Dataset.xlsx", sheet_name="Data")
 data = np.array(dataset_pd)
 
@@ -9,6 +9,8 @@ for i in data:
     # change comma separated lat/long coords to array form
     i[4] = i[4].split(",")
     i[5] = i[5].split(",")
+    obj = i[6]
+    i[6] = datetime.datetime(1, 1, 1, obj.hour, obj.minute, obj.second)
 
 drivers = []
 riders = []
@@ -50,30 +52,39 @@ def get_group_size(person):
 def get_seat_num(person):
     return person[11]
 
-def get_riders(gender, smoking, gender_preference):
+def get_riders(gender, smoking, gender_preference, leave_time):
     out = []
     gender=gender.lower()
+    
+    
     if gender_preference:
         for i in riders:
-            if i[2].lower() == gender:
-                if i[8] == smoking:
-                    out.append(i)
-                else:
-                    continue
-            continue
-    else:
-        for i in riders:
-            if i[8] == smoking:
-                if i[9]:
-                    if i[2].lower == gender:
+            if (i[6]-leave_time).total_seconds() <= 20*60:
+                if i[2].lower() == gender:
+                    if i[8] == smoking:
                         out.append(i)
                     else:
                         continue
-                else:
-                    out.append(i)
+                continue
             else:
                 continue
+    else:
+        for i in riders:
+            if (i[6]-leave_time).total_seconds() <= 20*60:
+                if i[8] == smoking:
+                    if i[9]:
+                        if i[2].lower == gender:
+                            out.append(i)
+                        else:
+                            continue
+                    else:
+                        out.append(i)
+                else:
+                    continue
+            else: 
+                continue
     return out
+
 
 def get_det_dist(a, b):
     r = 6371 #kilometers
