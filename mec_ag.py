@@ -2,29 +2,28 @@
 #anthony golubev
 
 import pandas as pd, numpy as np, math, datetime
-dataset_pd = pd.read_excel("MEC2024 Dataset.xlsx", sheet_name="Data")
+dataset_pd = pd.read_excel("Anthony-G-2024\MEC2024 Dataset.xlsx", sheet_name="Data")
 data = np.array(dataset_pd)
 
-for i in data:
-    # change comma separated lat/long coords to array form
-    i[4] = i[4].split(",")
-    i[5] = i[5].split(",")
-    obj = i[6]
-    i[6] = datetime.datetime(1, 1, 1, obj.hour, obj.minute, obj.second)
+for person in data:
+    # Change comma separated lat/long coords to array form
+    person[4] = person[4].split(",")
+    person[5] = person[5].split(",")
+    obj = person[6]
+    person[6] = datetime.datetime(1, 1, 1, obj.hour, obj.minute, obj.second)
 
+# Separate the drivers and riders
 drivers = []
 riders = []
-for i in data:
-    if i[3].lower() == "driver":
-        drivers.append(i)
+for person in data:
+    if person[3].lower() == "driver":
+        drivers.append(person)
     else:
-        riders.append(i)
+        riders.append(person)
 del data
 
 
-
-
-        
+# Create getters to retrieve a person's attributes
 def get_user_id(person):
     return person[0]
 def get_user_name(person):
@@ -52,46 +51,43 @@ def get_group_size(person):
 def get_seat_num(person):
     return int(person[11])
 
+
+# Filter riders by driver's constraints
 def get_riders(gender, smoking, gender_preference, leave_time):
     out = []
     gender=gender.lower()
     
-    
     if gender_preference:
-        for i in riders:
-            if (i[6]-leave_time).total_seconds() <= 20*60:
-                if i[2].lower() == gender:
-                    if i[8] == smoking:
-                        out.append(i)
-                    else:
-                        continue
+        for rider in riders:
+            if not abs((get_start_time(rider)-leave_time).total_seconds()) <= 20*60:
                 continue
-            else:
+            if not get_gender(rider).lower() == gender:
                 continue
+            if not get_smoking(rider) == smoking:
+                continue
+            out.append(rider)
     else:
-        for i in riders:
-            if (i[6]-leave_time).total_seconds() <= 20*60:
-                if i[8] == smoking:
-                    if i[9]:
-                        if i[2].lower == gender:
-                            out.append(i)
-                        else:
-                            continue
-                    else:
-                        out.append(i)
-                else:
-                    continue
-            else: 
+        for rider in riders:
+            if not abs((get_start_time(rider)-leave_time).total_seconds()) <= 20*60:
                 continue
+            if not get_smoking(rider) == smoking:
+                continue
+            if get_gender_pref(rider):
+                if get_gender(rider).lower == gender:
+                    out.append(rider)
+            else:
+                out.append(rider)
     return out
 
 
+# Calculate distance between two locations based on lat/long
 def get_dist(a, b):
     r = 6371 #kilometers
     p = (math.pi)/180
     x1, y1, x2, y2 = float(a[0])*p, float(a[1])*p, float(b[0])*p, float(b[1])*p
     return 2*r*math.asin(math.sqrt(0.5-math.cos(x2-x1)/2+math.cos(x1)*math.cos(x2)*(1-math.cos((y2-y1)))/2))
 
+# Calculate the deviation between two journeys
 def GetDeviation(initial, secondary):
     start_1 = initial[4]
     start_2 = secondary[4]
@@ -100,9 +96,8 @@ def GetDeviation(initial, secondary):
     return (get_dist(start_1, start_2)+get_dist(start_2, end_2)+get_dist(end_2, end_1)-get_dist(start_1, end_1))
 
 
-
+# Compute the route for a driver given the possible riders
 def ComputeDriverGrouping(driver, riders, totalVisited):
-    # Compute the route for the current driver given possible riders
     route = [driver]
     capacity = get_seat_num(driver)
    
@@ -144,16 +139,18 @@ def ComputeDriverGrouping(driver, riders, totalVisited):
     return(route[:], totalVisited)
 
 
+# Find groupings for each driver, minimizing deviation for each rider
 def ComputeGroupings(drivers, riders):
-    # Find groupings for each driver, minimizing deviation
     totalVisited = set()
     routes = []
     for driver in drivers:
-        get_riders(driver[2], driver[8], driver[9], driver[6])
-        route, totalVisited = ComputeDriverGrouping(driver, riders, totalVisited)
+        # Filter the riders and calculate the best route for each driver
+        filteredRiders = get_riders(get_gender(driver), get_smoking(driver), get_gender_pref(driver), get_start_time(driver))
+        route, totalVisited = ComputeDriverGrouping(driver, filteredRiders, totalVisited)
         routes.append(route)
     return routes
 
-print(ComputeGroupings(drivers, riders)[0])
+
+ComputeGroupings(drivers, riders)
 
 
